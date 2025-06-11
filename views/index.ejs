@@ -1,16 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <title>VirusTotal URL Scanner</title>
+  <title>VirusTotal URL Scanner</title>
   <link rel="stylesheet" href="/styles.css"/>
 </head>
 <body>
-    <div class = "container">
-      <h1>🔍 URL Scanner</h1>
-    <form action="/scan" method="POST">
+  <div class="container">
+    <h1>🔍 URL Scanner</h1>
+
+    <form id="scanForm" action="/scan" method="POST">
       <input type="text" name="url" placeholder="Enter a URL to scan" required />
       <button type="submit">Scan</button>
     </form>
+
+    <div id="loading" style="display: none; margin-top: 10px;">
+      <p>⏳ Scanning... Please wait.</p>
     </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("scanForm");
+    const loading = document.getElementById("loading");
+
+    form.addEventListener("submit", () => {
+      loading.style.display = "block";
+    });
+  </script>
 </body>
 </html>

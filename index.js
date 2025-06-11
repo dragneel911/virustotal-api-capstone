@@ -37,29 +37,35 @@ app.post("/scan", async (req, res) => {
     );
 
     // Step 2: Extract the URL ID from response
-    const urlId = postResponse.data.data.id;
+    const base64Url = Buffer.from(userUrl).toString("base64")
+   .replace(/=/g, '')  // remove '=' padding
+   .replace(/\+/g, '-')
+   .replace(/\//g, '_');
+
 
     // Step 3: Get scan report using the URL ID
     const getResponse = await axios.get(
-      `https://www.virustotal.com/api/v3/urls/${urlId}`,
-      {
-        headers: {
-          "x-apikey": apiKey,
-        },
-      }
-    );
+  `https://www.virustotal.com/api/v3/urls/${base64Url}`,
+  {
+    headers: {
+      "x-apikey": apiKey,
+    },
+  }
+);
+
 
     // Step 4: Render the result page and send data
     res.render("result", { result: getResponse.data });
 
   } catch (error) {
     // Step 5: Error Handling
-    if (error.response && error.response.status === 403) {
-      res.send("🚫 VirusTotal API rate limit reached. Please try again later.");
-    } else {
-      console.error("Error:", error.message);
-      res.send("Something went wrong. Please try again.");
-    }
+    console.error("❌ Full Error Response:");
+  console.dir(error.response?.data || error.message, { depth: null });
+
+  // Send the specific error message to the result page
+  res.render("result", {
+    error: error.response?.data?.error?.message || "Something went wrong. Please try again.",
+   });
   }
 });
 

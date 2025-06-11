@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Scan Result</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
@@ -8,24 +10,27 @@
   <div class="container">
     <h1>🔎 Scan Result</h1>
 
-    <p><strong>Scanned URL:</strong> <%= result.data.attributes.url %></p>
-    <p><strong>Last Analysis Date:</strong> <%= new Date(result.data.attributes.last_analysis_date * 1000).toLocaleString() %></p>
+    <% if (typeof result !== "undefined") { %>
+      <p><strong>Scanned URL:</strong> <%= result.data.attributes.url %></p>
+      <p><strong>Scan Date:</strong>
+        <%= result.data.attributes.last_analysis_date
+        ? new Date(result.data.attributes.last_analysis_date * 1000).toLocaleString()
+        : "Not available" %>
+      </p>
 
-    <p><strong>Total Engines:</strong> <%= result.data.attributes.last_analysis_stats.harmless + result.data.attributes.last_analysis_stats.malicious %></p>
-    <p><strong>Detected as Malicious:</strong> <%= result.data.attributes.last_analysis_stats.malicious %></p>
+      <p><strong>Analysis Stats:</strong></p>
+      <ul>
+        <li><strong>Harmless:</strong> <%= result.data.attributes.last_analysis_stats.harmless %></li>
+        <li><strong>Malicious:</strong> <%= result.data.attributes.last_analysis_stats.malicious %></li>
+        <li><strong>Suspicious:</strong> <%= result.data.attributes.last_analysis_stats.suspicious %></li>
+        <li><strong>Undetected:</strong> <%= result.data.attributes.last_analysis_stats.undetected %></li>
+      </ul>
 
-    <h2>Results by Engine:</h2>
-    <ul>
-      <% for (let engine in result.data.attributes.last_analysis_results) { %>
-        <% let engineResult = result.data.attributes.last_analysis_results[engine]; %>
-        <li>
-          <strong><%= engine %>:</strong>
-          <%= engineResult.result || "clean" %>
-        </li>
-      <% } %>
-    </ul>
+    <% } else { %>
+      <p class="error"><%= error %></p>
+    <% } %>
 
-    <a href="/" class="btn">🔁 Scan Another URL</a>
+    <a href="/">🔙 Scan Another URL</a>
   </div>
 </body>
 </html>
