@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scan Result</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>🔎 Scan Result</h1>
+
+    <p><strong>Scanned URL:</strong> <%= result.data.attributes.url %></p>
+    <p><strong>Last Analysis Date:</strong> <%= new Date(result.data.attributes.last_analysis_date * 1000).toLocaleString() %></p>
+
+    <p><strong>Total Engines:</strong> <%= result.data.attributes.last_analysis_stats.harmless + result.data.attributes.last_analysis_stats.malicious %></p>
+    <p><strong>Detected as Malicious:</strong> <%= result.data.attributes.last_analysis_stats.malicious %></p>
+
+    <h2>Results by Engine:</h2>
+    <ul>
+      <% for (let engine in result.data.attributes.last_analysis_results) { %>
+        <% let engineResult = result.data.attributes.last_analysis_results[engine]; %>
+        <li>
+          <strong><%= engine %>:</strong>
+          <%= engineResult.result || "clean" %>
+        </li>
+      <% } %>
+    </ul>
+
+    <a href="/" class="btn">🔁 Scan Another URL</a>
+  </div>
+</body>
+</html>
