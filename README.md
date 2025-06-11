@@ -24,9 +24,7 @@ This is a capstone project built using **Node.js**, **Express**, and **Axios**, 
 
 ## 🖥️ Screenshots
 
-*Coming soon – add UI screenshots here*
-
----
+*check in the folder
 
 ## 📦 Installation
 
